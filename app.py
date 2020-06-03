@@ -1,5 +1,5 @@
 from flask import Flask, g
-from flask.ext.login import LoginManager
+from flask_login import LoginManager
 
 import models
 
@@ -14,6 +14,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def load_user(userid):
     """Function to check for user for the LOGIN MANAGER"""
@@ -22,11 +23,13 @@ def load_user(userid):
     except models.DoesNotExist:
         return None
 
+
 @app.before_request
 def before_request():
     """connet to the database before each request"""
     g.db = models.DATABASE
     g.db.connect()
+
 
 @app.after_request
 def after_request(response):
@@ -34,5 +37,15 @@ def after_request(response):
     g.db.close()
     return response
 
+
 if __name__ == '__main__':
+    models.initialize()
+    try:
+        models.Login.create_user(
+            username='Admin',
+            password='admin',
+            is_admin=True
+        )
+    except ValueError:
+        pass
     app.run(debug=DEBUG, host=HOST, port=PORT)
