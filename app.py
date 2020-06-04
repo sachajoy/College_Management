@@ -4,7 +4,7 @@ from flask_login import LoginManager
 import models
 
 DEBUG = True
-PORT = 8000
+PORT = 8080
 HOST = '0.0.0.0'
 
 app = Flask(__name__)
@@ -37,6 +37,10 @@ def after_request(response):
     g.db.close()
     return response
 
+@app.route('/')
+def index():
+    """Home page of the app"""
+    return "<h1>hello</h1>"
 
 if __name__ == '__main__':
     models.initialize()
