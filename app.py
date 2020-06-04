@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, render_template
 from flask_login import LoginManager
 
 import models
@@ -40,7 +40,7 @@ def after_request(response):
 @app.route('/')
 def index():
     """Home page of the app"""
-    return "<h1>hello</h1>"
+    return render_template('base_template.html')
 
 if __name__ == '__main__':
     models.initialize()
